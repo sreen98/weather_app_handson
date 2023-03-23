@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import WeatherTile from "./WeatherTile";
 import { API_KEY } from "../constants/constants";
 
 const Weather = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [weatherData, setWeatherData] = useState([]);
+  const [showWeather, setShowWeather] = useState(false);
+  const [weatherData, setWeatherData] = useState({});
   const handleChange = (e: any) => {
     switch (e.target.name) {
       case "city":
@@ -26,7 +28,10 @@ const Weather = () => {
         .get(
           `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=${API_KEY}`
         )
-        .then((response) => setWeatherData(response.data));
+        .then((response) => {
+          setWeatherData(response.data);
+          setShowWeather(true);
+        });
     }
   }
 
@@ -48,6 +53,7 @@ const Weather = () => {
         ></input>
         <button onClick={(e) => handleSubmit(e)}>Submit</button>
       </form>
+      {showWeather ? <WeatherTile info={weatherData} /> : null}
     </div>
   );
 };
