@@ -20,6 +20,7 @@ const Weather = () => {
   const [showNoti, setShowNoti] = useState(false);
   const [showWeatherTile, setShowWeatherTile] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [notiMessage, setNotiMessage] = useState("");
   const handleChange = (e: any) => {
     switch (e.target.name) {
       case "city":
@@ -37,6 +38,7 @@ const Weather = () => {
     e.preventDefault();
     if (checkEnable()) {
       setShowNoti(true);
+      setNotiMessage("Please input city");
     } else {
       setShowSpinner(true);
       axios
@@ -50,6 +52,10 @@ const Weather = () => {
         })
         .catch(function (error) {
           console.log(error);
+          let message: string =
+            error?.response?.data?.message ?? "Please try again";
+          setShowNoti(true);
+          setNotiMessage(message);
           setShowSpinner(false);
         });
     }
@@ -80,7 +86,7 @@ const Weather = () => {
         </Button>
       </StyledForm>
       {showNoti ? (
-        <StyledAlert variant="danger">Please input city</StyledAlert>
+        <StyledAlert variant="danger">{notiMessage}</StyledAlert>
       ) : null}
       {showWeatherTile ? <WeatherTile info={weatherData} /> : null}
     </WeatherWrapper>
