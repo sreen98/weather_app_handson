@@ -45,8 +45,7 @@ export const Description = styled.span`
   font-size: 1.4rem;
 `;
 export const Details = styled.div`
-  margin-left: 4rem;
-  margin-right: 4rem;
+  margin: 2rem 4rem 2rem 4rem;
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: auto;

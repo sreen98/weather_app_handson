@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import axios from "axios";
 import WeatherTile from "./WeatherTile";
-// import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+
 import {
   WeatherWrapper,
   WeatherTitle,
   StyledForm,
   StyledInput,
+  StyledAlert,
 } from "../styling/WeatherStyle";
 import { API_KEY } from "../constants/constants";
 
 const Weather = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [showWeather, setShowWeather] = useState(false);
   const [weatherData, setWeatherData] = useState({});
+  const [showNoti, setShowNoti] = useState(false);
+  const [showWeatherTile, setShowWeatherTile] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   const handleChange = (e: any) => {
     switch (e.target.name) {
       case "city":
+        setShowNoti(false);
+        setShowWeatherTile(false);
         setCity(e.target.value);
         break;
       case "country":
@@ -26,38 +32,42 @@ const Weather = () => {
     }
   };
   const checkEnable = () => (city === "" ? true : false);
-  //TODO
-  /* const showNotification = () => {
-    return (
-      <Alert key="warning" variant="warning">
-        Please input city
-      </Alert>
-    );
-  }; */
+
+  const showNotification = () => {
+    return showNoti ? (
+      <StyledAlert variant="danger">Please input city</StyledAlert>
+    ) : null;
+  };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
     if (checkEnable()) {
-      alert("Please input city");
+      setShowNoti(true);
     } else {
+      setShowSpinner(true);
       axios
         .get(
           `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=${API_KEY}`
         )
         .then((response) => {
           setWeatherData(response.data);
-          setShowWeather(true);
+          setShowSpinner(false);
+          setShowWeatherTile(true);
+        })
+        .catch(function (error) {
+          console.log(error);
+          setShowSpinner(false);
         });
     }
   }
 
   return (
     <WeatherWrapper>
-      <WeatherTitle>Weather App </WeatherTitle>
+      <WeatherTitle>Weather App</WeatherTitle>
       <StyledForm>
         <StyledInput
           type="text"
-          placeholder="city"
+          placeholder="City"
           name="city"
           onChange={handleChange}
         ></StyledInput>
@@ -68,10 +78,15 @@ const Weather = () => {
           onChange={handleChange}
         ></StyledInput>
         <Button variant="primary" onClick={(e) => handleSubmit(e)}>
-          Submit
+          {showSpinner ? (
+            <Spinner animation="border" role="status"></Spinner>
+          ) : (
+            `Submit`
+          )}
         </Button>
       </StyledForm>
-      {showWeather ? <WeatherTile info={weatherData} /> : null}
+      {showNotification()}
+      {showWeatherTile ? <WeatherTile info={weatherData} /> : null}
     </WeatherWrapper>
   );
 };
