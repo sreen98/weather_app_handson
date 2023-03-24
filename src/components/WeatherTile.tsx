@@ -14,12 +14,13 @@ import {
   TableData,
 } from "../styling/WeatherTileStyle";
 
-const WeatherTile: React.FC<any> = (props) => {
-  const weatherInfo = props.info;
-  const iconURL =
-    "http://openweathermap.org/img/wn/" +
-    `${weatherInfo.cod !== 404 ? weatherInfo.weather[0].icon : null}` +
-    ".png";
+type InfoProps = {
+  [key: string]: any;
+};
+
+const WeatherTile = ({ info }: InfoProps): JSX.Element => {
+  const weatherInfo = info;
+  const iconURL = `http://openweathermap.org/img/wn/${weatherInfo?.weather?.[0]?.icon}.png`;
   return (
     <TileWrapper>
       <Card>
@@ -27,7 +28,6 @@ const WeatherTile: React.FC<any> = (props) => {
           {weatherInfo.name} , {weatherInfo.sys.country}. Weather
         </CardTitle>
         <CardSubtitle>As of {new Date().toLocaleTimeString()}</CardSubtitle>
-
         <StyledH1>
           {Math.floor(weatherInfo.main.temp - 273.15)}
           <sup>o</sup>
