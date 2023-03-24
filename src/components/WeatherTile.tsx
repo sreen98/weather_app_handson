@@ -1,7 +1,144 @@
 import React from "react";
+import {
+  TileWrapper,
+  Card,
+  CardTitle,
+  CardSubtitle,
+  StyledH1,
+  Main,
+  Description,
+  IconWrapper,
+  Details,
+  Section,
+  StlyedH4,
+  TableData,
+} from "../styling/WeatherTileStyle";
 
 const WeatherTile: React.FC<any> = (props) => {
   const weatherInfo = props.info;
-  return <>Weather Info of {weatherInfo.name}</>;
+  const iconurl =
+    "http://openweathermap.org/img/wn/" +
+    `${weatherInfo.cod !== 404 ? weatherInfo.weather[0].icon : null}` +
+    ".png";
+  return (
+    <TileWrapper>
+      {weatherInfo.cod !== "404" ? (
+        <>
+          <Card>
+            <CardTitle>
+              {weatherInfo.name} , {weatherInfo.sys.country}. Weather
+            </CardTitle>
+            <CardSubtitle>As of {new Date().toLocaleTimeString()}</CardSubtitle>
+
+            <StyledH1>
+              {Math.floor(weatherInfo.main.temp - 273.15)}
+              <sup>o</sup>
+            </StyledH1>
+            <Main>{weatherInfo.weather[0].main}</Main>
+            <IconWrapper src={iconurl} alt="" srcSet="" />
+            <Description>{weatherInfo.weather[0].description}</Description>
+          </Card>
+          <Details>
+            <Section>
+              <table>
+                <tbody>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>High/Low</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>
+                        {Math.floor(weatherInfo.main.temp_max - 273.15)}/
+                        {Math.floor(weatherInfo.main.temp_min - 273.15)}
+                      </span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Humidity</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>{weatherInfo.main.humidity} %</span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Pressure</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>{weatherInfo.main.pressure} hPa</span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Visibility</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>{weatherInfo.visibility / 1000} Km</span>
+                    </TableData>
+                  </tr>
+                </tbody>
+              </table>
+            </Section>
+            <Section>
+              <table>
+                <tbody>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Wind</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>
+                        {Math.floor((weatherInfo.wind.speed * 18) / 5)} km/hr
+                      </span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Wind Direction</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>
+                        {weatherInfo.wind.deg}
+                        <sup>o</sup> deg
+                      </span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Sunrise</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>
+                        {new Date(
+                          weatherInfo.sys.sunrise * 1000
+                        ).toLocaleTimeString()}
+                      </span>
+                    </TableData>
+                  </tr>
+                  <tr>
+                    <TableData>
+                      <StlyedH4>Sunset</StlyedH4>
+                    </TableData>
+                    <TableData>
+                      <span>
+                        {new Date(
+                          weatherInfo.sys.sunset * 1000
+                        ).toLocaleTimeString()}
+                      </span>
+                    </TableData>
+                  </tr>
+                </tbody>
+              </table>
+            </Section>
+          </Details>
+        </>
+      ) : (
+        <Card>
+          <h2>{weatherInfo.message}</h2>
+        </Card>
+      )}
+    </TileWrapper>
+  );
 };
 export default WeatherTile;

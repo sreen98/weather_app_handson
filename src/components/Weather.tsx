@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import WeatherTile from "./WeatherTile";
+// import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
+import {
+  WeatherWrapper,
+  WeatherTitle,
+  StyledForm,
+  StyledInput,
+} from "../styling/WeatherStyle";
 import { API_KEY } from "../constants/constants";
 
 const Weather = () => {
@@ -18,11 +26,19 @@ const Weather = () => {
     }
   };
   const checkEnable = () => (city === "" ? true : false);
+  //TODO
+  /* const showNotification = () => {
+    return (
+      <Alert key="warning" variant="warning">
+        Please input city
+      </Alert>
+    );
+  }; */
 
   async function handleSubmit(e: any) {
     e.preventDefault();
     if (checkEnable()) {
-      alert("please input city");
+      alert("Please input city");
     } else {
       axios
         .get(
@@ -36,25 +52,27 @@ const Weather = () => {
   }
 
   return (
-    <div>
-      <h1>Weather App </h1>
-      <form>
-        <input
+    <WeatherWrapper>
+      <WeatherTitle>Weather App </WeatherTitle>
+      <StyledForm>
+        <StyledInput
           type="text"
           placeholder="city"
           name="city"
           onChange={handleChange}
-        ></input>
-        <input
+        ></StyledInput>
+        <StyledInput
           type="text"
           placeholder="County"
           name="country"
           onChange={handleChange}
-        ></input>
-        <button onClick={(e) => handleSubmit(e)}>Submit</button>
-      </form>
+        ></StyledInput>
+        <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+          Submit
+        </Button>
+      </StyledForm>
       {showWeather ? <WeatherTile info={weatherData} /> : null}
-    </div>
+    </WeatherWrapper>
   );
 };
 
