@@ -33,12 +33,6 @@ const Weather = () => {
   };
   const checkEnable = () => (city === "" ? true : false);
 
-  const showNotification = () => {
-    return showNoti ? (
-      <StyledAlert variant="danger">Please input city</StyledAlert>
-    ) : null;
-  };
-
   async function handleSubmit(e: any) {
     e.preventDefault();
     if (checkEnable()) {
@@ -85,7 +79,9 @@ const Weather = () => {
           )}
         </Button>
       </StyledForm>
-      {showNotification()}
+      {showNoti ? (
+        <StyledAlert variant="danger">Please input city</StyledAlert>
+      ) : null}
       {showWeatherTile ? <WeatherTile info={weatherData} /> : null}
     </WeatherWrapper>
   );
