@@ -77,7 +77,11 @@ const Weather = () => {
           name="country"
           onChange={handleChange}
         ></StyledInput>
-        <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+        <Button
+          variant="primary"
+          onClick={(e) => handleSubmit(e)}
+          disabled={showWeatherTile}
+        >
           {showSpinner ? (
             <Spinner animation="border" role="status"></Spinner>
           ) : (
